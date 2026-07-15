@@ -43,10 +43,7 @@ Since this app builds a custom Docker image specifically for you, you'll need to
 2. Click the **+ Install a customized app** icon (top right of the App store).
 3. Look for the **Import** icon at the very top right of the install window.
 4. Select **Docker Compose** and paste the exact contents of the `docker-compose.yml` file from the repository you just cloned.
-5. CasaOS will automatically fill in the fields. **Important:** 
-   - **Docker Image**: If it asks for an Image, type `cd-manager`
-   - **Tag**: If it asks for a Tag, type `latest`
-   - **Volumes**: Check the "Volumes" section! Ensure the Host side points exactly to the folder you just downloaded. For example, map `/DATA/AppData/cd-manager/data` on the host to `/app/data` inside the container.
+5. CasaOS will automatically fill in all the correct fields (including the Image, Tag, and Volumes mapping directly to your current folder).
 6. Click **Install**. CasaOS will use the image you built in Step 1 and launch it!
 7. Once it finishes, click the new app icon on your dashboard to open your CD Manager!
 

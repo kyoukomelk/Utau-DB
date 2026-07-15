@@ -1,11 +1,10 @@
 services:
   cd-manager:
     build: .
+    image: cd-manager:latest
+    container_name: cd-manager
     ports:
       - "3000:3000"
     volumes:
-      - cd-data:/app/data
+      - ./data:/app/data
     restart: unless-stopped
-
-volumes:
-  cd-data:
