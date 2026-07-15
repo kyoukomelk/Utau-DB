@@ -1,7 +1,10 @@
 import db from '@/lib/db';
 import { NextResponse } from 'next/server';
+import { isAuthenticated } from '@/lib/auth';
 
 export async function GET(request) {
+  if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     const cds = db.prepare('SELECT * FROM cds ORDER BY created_at DESC').all();
     // Parse tracklist JSON for frontend
@@ -16,6 +19,7 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+  if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const body = await request.json();
     const { mbid, title, artist, year, tracklist, album_art_url, status, catalog_number } = body;

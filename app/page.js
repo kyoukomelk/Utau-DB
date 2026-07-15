@@ -23,6 +23,56 @@ export default function HomePage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshProgress, setRefreshProgress] = useState(0);
 
+  // Auth state
+  const [authStatus, setAuthStatus] = useState('loading');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+
+  const checkAuth = async () => {
+    try {
+      const res = await fetch('/api/auth');
+      const data = await res.json();
+      if (data.needsSetup) {
+        setAuthStatus('needsSetup');
+      } else if (data.loggedIn) {
+        setAuthStatus('loggedIn');
+        fetchCds();
+      } else {
+        setAuthStatus('loggedOut');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleAuthSubmit = async (action) => {
+    setAuthError('');
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action, password: authPassword })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setAuthPassword('');
+        setAuthStatus('loggedIn');
+        fetchCds();
+      } else {
+        setAuthError(data.error || 'Authentication failed');
+      }
+    } catch (e) {
+      setAuthError('Network error');
+    }
+  };
+
+  const handleLogout = async () => {
+    await fetch('/api/auth', { method: 'DELETE' });
+    setAuthStatus('loggedOut');
+    setCds([]);
+    setIsSettingsOpen(false);
+  };
+
   const handleRefreshDatabase = async () => {
     setIsRefreshing(true);
     setRefreshProgress(0);
@@ -98,7 +148,7 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchCds();
+    checkAuth();
     const storedCards = localStorage.getItem('cardsPerRow');
     if (storedCards) {
       setCardsPerRow(Number(storedCards));
@@ -240,6 +290,44 @@ export default function HomePage() {
     if (status === 'wanna_buy') return <><Pin size={10} /> Wishlist</>;
     return status;
   };
+
+  if (authStatus === 'loading') {
+    return <main style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', color: '#FFF' }}>Loading...</main>;
+  }
+
+  if (authStatus === 'needsSetup' || authStatus === 'loggedOut') {
+    return (
+      <main style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <div className="dialog" style={{ width: '400px' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '8px' }}>
+            {authStatus === 'needsSetup' ? 'Welcome to UTAU DB' : 'Login'}
+          </h2>
+          <p style={{ color: '#938F99', fontSize: '14px', marginBottom: '24px' }}>
+            {authStatus === 'needsSetup' ? 'Create a master password to protect your database.' : 'Enter your master password.'}
+          </p>
+          
+          <input 
+            type="password" 
+            placeholder="Master Password"
+            value={authPassword}
+            onChange={e => setAuthPassword(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleAuthSubmit(authStatus === 'needsSetup' ? 'setup' : 'login')}
+            style={{ width: '100%', marginBottom: '16px' }}
+          />
+          
+          {authError && <p style={{ color: '#F2B8B5', fontSize: '12px', marginBottom: '16px' }}>{authError}</p>}
+          
+          <button 
+            className="btn btn-primary" 
+            style={{ width: '100%' }}
+            onClick={() => handleAuthSubmit(authStatus === 'needsSetup' ? 'setup' : 'login')}
+          >
+            {authStatus === 'needsSetup' ? 'Set Password' : 'Login'}
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main style={cardsPerRow > 0 ? { '--cards-per-row': cardsPerRow } : {}}>
@@ -472,6 +560,14 @@ export default function HomePage() {
                 Import Database (JSON)
                 <input type="file" accept=".json" style={{ display: 'none' }} onChange={handleImportDatabase} />
               </label>
+
+              <button 
+                className="btn btn-primary" 
+                style={{ width: '100%', backgroundColor: '#BA1A1A', border: 'none', color: '#FFFFFF', marginTop: '16px' }}
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
             </div>
 
             <div className="dialog-actions">
