@@ -22,15 +22,20 @@ This application is built to run effortlessly inside a Docker container.
 
 Since this app builds a custom Docker image specifically for you, you'll need to download the code to your server first before importing it into CasaOS.
 
-**Step 1: Download the repository**
+**Step 1: Download and Build the repository**
 1. SSH into your CasaOS/ZimaOS server (or open the built-in terminal).
 2. Navigate to where you keep your app data (usually `/DATA/AppData/` on CasaOS):
    ```bash
    cd /DATA/AppData/
    ```
-3. Clone this repository into a new folder:
+3. Clone this repository into a new folder and go into it:
    ```bash
    git clone https://github.com/kyoukomelk/Utau-DB.git cd-manager
+   cd cd-manager
+   ```
+4. Build the custom Docker image locally by running this command:
+   ```bash
+   sudo docker build -t cd-manager:latest .
    ```
 
 **Step 2: Install via CasaOS UI**
@@ -38,8 +43,11 @@ Since this app builds a custom Docker image specifically for you, you'll need to
 2. Click the **+ Install a customized app** icon (top right of the App store).
 3. Look for the **Import** icon at the very top right of the install window.
 4. Select **Docker Compose** and paste the exact contents of the `docker-compose.yml` file from the repository you just cloned.
-5. CasaOS will automatically fill in the fields. **Important:** Check the "Volumes" section! Ensure the Host side points exactly to the folder you just downloaded. For example, map `/DATA/AppData/cd-manager/data` on the host to `/app/data` inside the container.
-6. Click **Install**. CasaOS will automatically build the app's Docker image and launch it!
+5. CasaOS will automatically fill in the fields. **Important:** 
+   - **Docker Image**: If it asks for an Image, type `cd-manager`
+   - **Tag**: If it asks for a Tag, type `latest`
+   - **Volumes**: Check the "Volumes" section! Ensure the Host side points exactly to the folder you just downloaded. For example, map `/DATA/AppData/cd-manager/data` on the host to `/app/data` inside the container.
+6. Click **Install**. CasaOS will use the image you built in Step 1 and launch it!
 7. Once it finishes, click the new app icon on your dashboard to open your CD Manager!
 
 ---
