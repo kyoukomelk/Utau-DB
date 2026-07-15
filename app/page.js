@@ -322,8 +322,9 @@ export default function HomePage() {
 
       {/* Details / Edit Modal */}
       {selectedCd && (
-        <div className="details-modal">
-          <div className="details-header">
+        <div className="dialog-overlay" onClick={() => setSelectedCd(null)}>
+          <div className="details-modal" onClick={e => e.stopPropagation()}>
+            <div className="details-header">
             <h2>Details</h2>
             <div className="details-header-actions">
               {isEditing ? (
@@ -391,7 +392,7 @@ export default function HomePage() {
                   <a href={`https://www.cdjapan.co.jp/searchuni?q=${encodeURIComponent(selectedCd.catalog_number || selectedCd.title)}`} target="_blank" rel="noreferrer" className="store-btn">
                     CDJapan
                   </a>
-                  <a href={`https://music.apple.com/jp/search?term=${encodeURIComponent(selectedCd.title)}`} target="_blank" rel="noreferrer" className="store-btn">
+                  <a href={`https://music.apple.com/jp/search?term=${encodeURIComponent(selectedCd.artist + ' ' + selectedCd.title)}`} target="_blank" rel="noreferrer" className="store-btn">
                     iTunes JP
                   </a>
                   <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(selectedCd.artist + ' ' + selectedCd.title)}`} target="_blank" rel="noreferrer" className="store-btn">
@@ -417,6 +418,7 @@ export default function HomePage() {
               )}
             </>
           )}
+          </div>
         </div>
       )}
 
