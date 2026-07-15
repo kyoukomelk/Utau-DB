@@ -539,15 +539,6 @@ export default function HomePage() {
               <button 
                 className="btn btn-primary" 
                 style={{ width: '100%', backgroundColor: '#313033', border: '1px solid #49454F', color: '#E6E1E5' }}
-                onClick={handleRefreshDatabase}
-                disabled={isRefreshing}
-              >
-                {isRefreshing ? `Refreshing... (${refreshProgress}/${cds.length})` : 'Refresh Database Metadata (Debug)'}
-              </button>
-
-              <button 
-                className="btn btn-primary" 
-                style={{ width: '100%', backgroundColor: '#313033', border: '1px solid #49454F', color: '#E6E1E5' }}
                 onClick={handleExportDatabase}
               >
                 Export Database (JSON)
