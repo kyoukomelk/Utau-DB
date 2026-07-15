@@ -55,8 +55,9 @@ Since this app builds a custom Docker image specifically for you, you'll need to
 **A:** Since this app uses a custom-built image, CasaOS cannot update it automatically. To update to the latest code:
 1. SSH into your server and navigate to the folder: `cd /DATA/AppData/utaudb`
 2. Download the latest changes: `git pull`
-3. Rebuild the Docker image: `sudo docker build -t utaudb:latest .`
-4. In your CasaOS dashboard, simply click the three dots on the UTAU DB icon and select **Restart**. It will instantly reboot using the fresh code!
+3. Rebuild the Docker image: `sudo docker build --no-cache -t utaudb:latest .`
+4. Tell Docker to apply the new image: `sudo docker-compose up -d`
+*(Note: Do not just click "Restart" in the CasaOS dashboard, as that only reboots the old container without applying the new image!)*
 
 **Q: Where is my collection data actually saved?**
 **A:** Your CDs are saved in a tiny SQLite database file. Docker safely maps this to the `data/` folder inside this directory on your host machine. As long as you don't delete that folder, your collection is safe even if you rebuild or restart the container!
