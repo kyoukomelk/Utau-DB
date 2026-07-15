@@ -30,12 +30,12 @@ Since this app builds a custom Docker image specifically for you, you'll need to
    ```
 3. Clone this repository into a new folder and go into it:
    ```bash
-   git clone https://github.com/kyoukomelk/Utau-DB.git cd-manager
-   cd cd-manager
+   git clone https://github.com/kyoukomelk/Utau-DB.git utaudb
+   cd utaudb
    ```
 4. Build the custom Docker image locally by running this command:
    ```bash
-   sudo docker build -t cd-manager:latest .
+   sudo docker build -t utaudb:latest .
    ```
 
 **Step 2: Install via CasaOS UI**
@@ -45,7 +45,7 @@ Since this app builds a custom Docker image specifically for you, you'll need to
 4. Select **Docker Compose** and paste the exact contents of the `docker-compose.yml` file from the repository you just cloned.
 5. CasaOS will automatically fill in all the correct fields (including the Image, Tag, and Volumes mapping directly to your current folder).
 6. Click **Install**. CasaOS will use the image you built in Step 1 and launch it!
-7. Once it finishes, click the new app icon on your dashboard to open your CD Manager!
+7. Once it finishes, click the new app icon on your dashboard to open your UTAU DB!
 
 ---
 

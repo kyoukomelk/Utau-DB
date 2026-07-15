@@ -1,8 +1,8 @@
 services:
-  cd-manager:
+  utaudb:
     build: .
-    image: cd-manager:latest
-    container_name: cd-manager
+    image: utaudb:latest
+    container_name: utaudb
     ports:
       - "3000:3000"
     volumes:
